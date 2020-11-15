@@ -46,19 +46,37 @@ d3.json(queryUrl, function(data) {
             fillOpacity: 0.75,
             radius: markerRadius,
             color: "white",
-            fillColor: "white"
+            fillColor: markerColor(depth[2]),
         })
   
         // Pop up for markers
         circle.bindPopup(
-            "<h2>" + data.features[i].properties.place + "</h2>" +
-            "<h3>" + "Magnitude: " + earthquakeMag + "</h3>" +
-            "<p>" + data.features[i].properties.time + "</p>"           
+            "<h2>" + data.features[i].properties.title + "</h2>" +
+            "<p>" + "Time: " + new Date(data.features[i].properties.time) + "</p>" +
+            "<p>" + "Depth: "+ data.features[i].geometry.coordinates[2] + " kilometers</p>"      
         ).addTo(myMap);               
     }
   });
 
 // Function to determine size of marker (based on magnitude)
 function markerSize(earthquakeMag) {
-    return earthquakeMag * 100000;
- }
+    return earthquakeMag * 50000;
+}
+
+// Function to determine color of marker (based on depth)
+function markerColor(depth) {
+    switch (true) {
+    case depth >= 90:
+        return "#ff5f65";
+    case depth >= 70:
+        return "#fca35d";
+    case depth >= 50:
+        return "#fdb72a";
+    case depth >= 30:
+        return "#f7db11";
+    case depth >= 10:
+        return "#dcf400";
+    default:
+        return "#a3f600";
+    }
+  }
